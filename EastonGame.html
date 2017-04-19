@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Hopping Game</title>
+    <script src="jquery-1.12.3.min.js"></script>
+    <script src="Levels.js"></script>
+    <script src="GameBehavior.js"></script>
+    <script src="GameAppearance.js"></script>
+</head>
+<body>
+<script>
+
+    var level = 0;
+
+    function getBlockType(x, y) {
+        return levels[level][Math.floor(y)*levelWidth+Math.floor(x)];
+    }
+    function isOnGround(x, y) {
+        return levels[level][(Math.floor(y / blockSize)+1)*levelWidth+Math.floor(x / blockSize)] == 1;
+    }
+
+    var isPressed = [];
+    var wasPressed = [];
+
+    $(document).ready(function() {
+        parseLevelStrings();
+        drawLevel(level);
+        window.requestAnimationFrame(onAnimationFrame);
+
+        document.onkeydown = function(e) {
+            wasPressed[e.keyCode] = isPressed[e.keyCode];
+            isPressed[e.keyCode] = 1;
+        };
+        document.onkeyup = function(e) {
+            wasPressed[e.keyCode] = isPressed[e.keyCode];
+            isPressed[e.keyCode] = 0;
+            if (e.code == 'KeyN' || e.char=='n' || e.char=='N') {
+                youWon = true;
+            }
+        };
+    });
+
+    var lastAnimationFrame = 0;
+    var youWon = false;
+    var youLost = false;
+
+    var newX;
+    var newY;
+
+    function onAnimationFrame() {
+        var currentTime = new Date().getTime();
+        if (currentTime - lastAnimationFrame > (1/30.0)) {
+            lastAnimationFrame = currentTime;
+
+            var oldX = parseFloat(ball.getAttribute('cx')-blockSize/4)/blockSize;
+            var oldY = parseFloat(ball.getAttribute('cy')-blockSize/4)/blockSize;
+            newX = oldX;
+            newY = oldY;
+
+            doBehaviors(isPressed[38], isPressed[40], isPressed[37], isPressed[39], oldX, oldY, !wasPressed[38]);
+            wasPressed[38] = isPressed[38];
+
+            ball.setAttribute('cx', newX*blockSize+(blockSize/4));
+            ball.setAttribute('cy', newY*blockSize+(blockSize/4));
+
+            var viewY = newY*blockSize - 300;
+            if (viewY < 0) {
+                viewY = 0;
+            }
+            $("#canvas")[0].setAttribute("viewBox", "0 "+viewY+" 600 600");
+
+            shark.forEach(function(shark, i) {
+                shark.setAttribute('transform', 'translate('+shark_x[i]*blockSize+' '+shark_y[i]*blockSize+') scale(5 5)'  );
+            });
+            if (youWon) {
+                window.alert("you won!");
+                level = level + 1;
+                youWon = false;
+                drawLevel(level);
+                isPressed = [];
+            }
+            if (youLost) {
+                youLost = false;
+                drawLevel(level);
+                isPressed = [];
+            }
+            window.requestAnimationFrame(onAnimationFrame);
+        }
+    }
+</script>
+<svg id="canvas" width="600px" height="600px" viewBox="0 0 600 600">
+<rect width="100%" height="100%" fill="rgb(0,0,255)"></rect>
+</svg></body>
+</html>

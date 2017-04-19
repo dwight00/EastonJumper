@@ -15,7 +15,11 @@
  a button to make spikes go away
  monsters that you jump on to get a point
  doors that open when you have enough points
- a platform that slowly falls down when you stand on it
+ a platform that falls at the speed of gravity the moment that you stand on it.
+ when the platform falls, you can only jump within the first 200 milliseconds.
+ after that, you fall to whatever is below, the platform falls all the way off the
+ screen (regardless of what's below), and the platform does not come back until
+ you start the level over.
  ...
  */
 window.alert("ready?");

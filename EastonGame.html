@@ -73,6 +73,10 @@
             shark.forEach(function(shark, i) {
                 shark.setAttribute('transform', 'translate('+shark_x[i]*blockSize+' '+shark_y[i]*blockSize+') scale(5 5)'  );
             });
+            faller.forEach(function(faller, i) {
+                faller.setAttribute('x', faller_x[i]*blockSize);
+                faller.setAttribute('y', faller_y[i]*blockSize);
+            });
             if (youWon) {
                 window.alert("you won!");
                 level = level + 1;

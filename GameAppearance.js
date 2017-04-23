@@ -13,6 +13,10 @@ var shark = [];
 var shark_x =[];
 var shark_y =[];
 
+var faller = [];
+var faller_x =[];
+var faller_y =[];
+
 var blockSize = 25;
 var ballSize = 15;
 
@@ -117,6 +121,20 @@ function drawLevel(level) {
                 opacity: 3/4
             });
             $("#canvas").append(block);
+        }
+        if (levels[level][i] == 8) {
+            var block = makeSVG('rect', {
+                x: x * blockSize,
+                y: y * blockSize,
+                width: blockSize,
+                height: blockSize,
+                fill: 'rgb(244,0,244)',
+            });
+            $("#canvas").append(block);
+
+            faller.push(block);
+            faller_x.push(x);
+            faller_y.push(y);
         }
         if (levels[level][i] == 9) {
             ball = makeSVG('circle',

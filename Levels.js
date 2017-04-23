@@ -10,6 +10,7 @@
  5 = shark
  6 = spikes
  7 = quicksand
+ 8 = falling blocks
  to do later:
  change to letters / symbols instead of numbers
  a button to make spikes go away
@@ -34,7 +35,7 @@ var levelStrings = [
         "00000000000000000001",
         "00000000000000000001",
         "00000000000060001001",
-        "00312110011111110001",
+        "00312110088888880001",
         "00000000000000000001",
         "00000010000000000001",
         "00000000000000000011",

@@ -4,6 +4,7 @@
 
 var jumpStartTime = 0;
 var shark_direction = [];    // 1 right, -1 left
+var faller_touched = [];    // true = it was touched
 
 function startTimer() {
     jumpStartTime = (new Date().getTime()) / 1000;
@@ -11,6 +12,16 @@ function startTimer() {
 function timerTime() {
     var currentTime = (new Date().getTime()) / 1000;
     return currentTime - jumpStartTime;
+}
+function weAreOnAFaller(x, y) {
+    var isOnFaller = false;
+    faller.forEach(function (f, i) {
+        if (faller_x[i] == Math.floor(x) &&
+           Math.floor(faller_y[i]) == Math.floor(y)) {
+            isOnFaller = true;
+        }
+    });
+    return isOnFaller;
 }
 function doBehaviors(upIsPressed, downIsPressed, leftIsPressed, rightIsPressed, x, y, isNewJump) {
     // things to do
@@ -43,7 +54,8 @@ function doBehaviors(upIsPressed, downIsPressed, leftIsPressed, rightIsPressed, 
         // check if the block below us is ground
         if (getBlockType(x,y+1) == 1 ||
            getBlockType(x,y) == 4 ||
-           getBlockType(x,y) == 5) {
+           getBlockType(x,y) == 5 ||
+           weAreOnAFaller(x,y)) {
             startTimer();
         }
         if (timerTime() < 1/2) {
@@ -75,6 +87,14 @@ function doBehaviors(upIsPressed, downIsPressed, leftIsPressed, rightIsPressed, 
     newX = x;
     newY = y;
 
+    if (getBlockType(x, y) == 8) {
+        faller.forEach(function(f, i) {
+            if (faller_x[i] == Math.floor(x) &&
+                faller_y[i] == Math.floor(y)) {
+                faller_touched[i] = true;
+            }
+        });
+    }
     if (getBlockType(x, y) == 2) {
         youWon = true;
     }
@@ -87,6 +107,13 @@ function doBehaviors(upIsPressed, downIsPressed, leftIsPressed, rightIsPressed, 
     if (y > 30) {
         youLost = true;
     }
+
+
+    faller.forEach(function(f,i) {
+        if (faller_touched[i]) {
+            faller_y[i] = faller_y[i] + 1/3;
+        }
+    });
 
     // shark behavior
     shark.forEach(function(s,i) {

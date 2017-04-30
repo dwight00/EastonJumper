@@ -11,7 +11,12 @@ function startTimer() {
 }
 function timerTime() {
     var currentTime = (new Date().getTime()) / 1000;
-    return currentTime - jumpStartTime;
+    if (level == 7) {
+        return (currentTime - jumpStartTime) * 3/2;
+    }
+    else {
+        return currentTime - jumpStartTime;
+    }
 }
 function weAreOnAFaller(x, y) {
     var isOnFaller = false;
